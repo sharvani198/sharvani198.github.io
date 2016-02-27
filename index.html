@@ -1,12 +1,77 @@
+<!DOCTYPE html>
 <html>
 <head>
-<title>World Of Shar</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.js"/>
+	<title>World of Shar</title>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.css">
+	<style type="text/css">
+	.content{
+		border: 1px solid silver;
+		padding: 0.22em;
+		font-size: 1.2em;
+		width: 100%;
+		margin-bottom: 0.5em;
+	}
+	#textarea{
+		height: 500px;
+		border-width: 3px;
+	}
+	#functionality .btn{
+		margin: 3px;
+	}
+	input[type="file"]{
+		visibility: hidden;
+	}
+	</style>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#save").click(function(){
+				var title = $("#title").text().trim();
+				var text = $("#textarea").text().trim();
+				var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+                saveAs(blob, title+".txt");
+			});
+			$("#load").click(function(){
+				$("#fileInput").click();
+			});
+			$("#fileInput").change(function(e) {
+				var file = e.target.files[0];
+				var title = file["name"].split(".")[0];
+				$("#title").text(title);
+				var fileReader = new FileReader();
+				fileReader.onload = function(e) { 
+	      			var contents = e.target.result;
+        			$("textarea").text(contents);
+        		}
+        		fileReader.readAsText(file);
+			});
+			$("#count").click(function(e){
+				var text = $("#textarea").text().trim();
+				$("#words").text(text.split(" ").length);
+			});
+		});
+	</script>
 </head>
-<body>
-<div>
-  
+<body class="container-fluid">
+<h2>Write </h2>
+<div class="row">
+	<div class="col-md-offset-1 col-md-9">
+		<div class="content" id="title" contenteditable="true">
+			Title
+		</div>
+		<div class="content" id="textarea" contenteditable="true">
+			Text
+		</div>
+	</div>
+	<div id="functionality" class="col-md-1">
+		<button class="btn btn-primary" id="save">Save</button>
+		<button class="btn btn-primary" id="load">Load</button>
+		<button class="btn btn-info" id="count">Word Count</button>
+		<h5 id="words">1</h5>
+		<input type="file" id="fileInput"/>
+	</div>
+	
 </div>
 </body>
 </html>
-
