@@ -6,18 +6,8 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.css">
 	<style type="text/css">
-	.content{
-		border: 1px solid silver;
-		padding: 0.22em;
-		font-size: 1.2em;
-		width: 100%;
-		margin-bottom: 0.5em;
-	}
-	#textarea{
-		height: 500px;
-		border-width: 3px;
-	}
-	#functionality .btn{
+
+	.form-control, .btn, .well{
 		margin: 3px;
 	}
 	input[type="file"]{
@@ -27,8 +17,8 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$("#save").click(function(){
-				var title = $("#title").text().trim();
-				var text = $("#textarea").text().trim();
+				var title = $("#title").val();
+				var text = $("#textarea").val();
 				var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, title+".txt");
 			});
@@ -38,21 +28,21 @@
 			$("#fileInput").change(function(e) {
 				var file = e.target.files[0];
 				var title = file["name"].split(".")[0];
-				$("#title").text(title);
+				$("#title").val(title);
 				var fileReader = new FileReader();
 				fileReader.onload = function(e) { 
 	      			var contents = e.target.result;
-        			$("textarea").text(contents);
+        			$("textarea").val(contents);
         		}
         		fileReader.readAsText(file);
 			});
 			$("#count").click(function(e){
-				var text = $("#textarea").text().trim();
+				var text = $("#textarea").val();
 				$("#words").text(text.split(" ").length);
 			});
 			$("#clear").click(function(){
-				$("#title").text("Title");
-				$("#textarea").text("Text");
+				$("#title").val("Title");
+				$("#textarea").val("Text");
 			});
 		});
 	</script>
@@ -60,20 +50,16 @@
 <body class="container-fluid">
 <h2>Write </h2>
 <div class="row">
-	<div class="col-md-offset-1 col-md-9">
-		<div class="content" id="title" contenteditable="true">
-			Title
-		</div>
-		<div class="content" id="textarea" contenteditable="true">
-			Text
-		</div>
+	<div class="col-md-9">
+		<input type="text" id="title" class="form-control" value="Title"></input>
+		<textarea id="textarea" rows="20" class="form-control">Text</textarea>
 	</div>
 	<div id="functionality" class="col-md-1">
 		<button class="btn" id="clear">Clear</button>
 		<button class="btn btn-success" id="save">Save</button>
 		<button class="btn btn-primary" id="load">Load</button>
-		<button class="btn btn-info" id="count">Word Count</button>
-		<h5 id="words">1</h5>
+		<button class="btn btn-info" id="count">Words </button>
+		<h5 class="well well-sm" id="words">1</h5>
 		<input type="file" id="fileInput"/>
 	</div>
 	
